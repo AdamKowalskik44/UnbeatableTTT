@@ -1,0 +1,7 @@
+C:\Users\adamk\source\repos\unbeatableTTT\unbeatableTTT\bin\Debug\unbeatableTTT.exe.config
+C:\Users\adamk\source\repos\unbeatableTTT\unbeatableTTT\bin\Debug\unbeatableTTT.exe
+C:\Users\adamk\source\repos\unbeatableTTT\unbeatableTTT\bin\Debug\unbeatableTTT.pdb
+C:\Users\adamk\source\repos\unbeatableTTT\unbeatableTTT\obj\Debug\unbeatableTTT.csprojAssemblyReference.cache
+C:\Users\adamk\source\repos\unbeatableTTT\unbeatableTTT\obj\Debug\unbeatableTTT.csproj.CoreCompileInputs.cache
+C:\Users\adamk\source\repos\unbeatableTTT\unbeatableTTT\obj\Debug\unbeatableTTT.exe
+C:\Users\adamk\source\repos\unbeatableTTT\unbeatableTTT\obj\Debug\unbeatableTTT.pdb
