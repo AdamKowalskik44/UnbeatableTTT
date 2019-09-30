@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 namespace unbeatableTTT
 {
     class TicTacToe
-
-        //TODO - Do napisania fukcja:
-        // -co jeśli gracz nie zaczyna
     {
+        #region class properties
         char[,] mat = new char[3, 3];
         char whoWon;
         char activePlayer, alivePlayer;
@@ -18,11 +16,7 @@ namespace unbeatableTTT
         const char player1 = 'X', player2 = 'O';
         int x, y;
         int turnCounter = 1;
-
-        public char[,] Get_mat()
-        {
-            return mat;
-        }
+        #endregion
 
         public TicTacToe()
         {
@@ -56,9 +50,6 @@ namespace unbeatableTTT
             }
 
             Display(mat);
-
-            activePlayer = player1; //DELET THIS AFTER
-            alivePlayer = player2;
         }
 
         public void Display(char[,] mat)
@@ -182,7 +173,18 @@ namespace unbeatableTTT
             {
                 MarkRandomizedCorner();
             }
-
+            else if (turnCounter == 2)
+            {
+                if (mat[1, 1] == emptyField)
+                {
+                    x = 1;
+                    y = 1;
+                }
+                else
+                {
+                    MarkRandomizedCorner();
+                }
+            }
             else if (turnCounter == 3) //turn 3
             {
                 //if other player placed his mark not in corner or middle, then place it in the middle
@@ -202,7 +204,7 @@ namespace unbeatableTTT
                     FindAdjacentCorner(activePlayer);
                 }
             }
-            else if (turnCounter == 5 || turnCounter == 7)
+            else
             {
                 if (LookForWin(mat, activePlayer, out x, out y) == true) //look for a win
                 {
@@ -218,12 +220,8 @@ namespace unbeatableTTT
                 }
                 else
                 {
-                    Console.WriteLine("Error! scenario not forseen. Fix your code :)");
+                    PlaceOnLastFreeSpot();
                 }                    
-            }
-            else if (turnCounter == 9)
-            {
-                PlaceOnLastFreeSpot();
             }
             return 0;
         }
