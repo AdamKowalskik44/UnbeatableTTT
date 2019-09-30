@@ -12,14 +12,7 @@ namespace unbeatableTTT
         {
             Console.WriteLine("hello");
             TicTacToe TicTacToe = new TicTacToe();
-
-            do
-            {
-                TicTacToe.TakeTurn();
-            } while (TicTacToe.Check(TicTacToe.Get_mat()) == false);
-
-            TicTacToe.WhoWon();
-
+            TicTacToe.TakeTurn();
             Console.ReadKey();
         }
     }

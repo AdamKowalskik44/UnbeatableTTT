@@ -10,8 +10,6 @@ namespace unbeatableTTT
 
         //TODO - Do napisania fukcja:
         // -co jeśli gracz nie zaczyna
-        // -obsłużenie remisu
-        //runda 9
     {
         char[,] mat = new char[3, 3];
         char whoWon;
@@ -63,7 +61,7 @@ namespace unbeatableTTT
             alivePlayer = player2;
         }
 
-        public void Display(char[,] matCopy)
+        public void Display(char[,] mat)
         {
             Console.WriteLine();
             for (int i = 0; i < 3; i++)
@@ -77,28 +75,28 @@ namespace unbeatableTTT
             Console.WriteLine();
         }
 
-        public bool Check(char[,] matCopy)
+        public bool Check(char[,] mat)
         {
             for (int i = 0; i < 3; i++) //checking rows
             {
-                if (matCopy[0, i] ==  matCopy[1, i] && matCopy[1, i] ==  matCopy[2, i] && matCopy[0, i] != emptyField)
+                if (mat[0, i] ==  mat[1, i] && mat[1, i] ==  mat[2, i] && mat[0, i] != emptyField)
                 {
-                    whoWon = matCopy[0, i];
+                    whoWon = mat[0, i];
                     return true;
                 }
             }
 
             for (int i = 0; i < 3; i++) //checking columns
             {
-                if (matCopy[i, 0] ==  matCopy[i, 1] && matCopy[i, 0] == matCopy[i, 2] && matCopy[i, 0] != emptyField)
+                if (mat[i, 0] ==  mat[i, 1] && mat[i, 0] == mat[i, 2] && mat[i, 0] != emptyField)
                 {
-                    whoWon = matCopy[i, 0];
+                    whoWon = mat[i, 0];
                     return true;                    
                 }
             }
 
             //checking diagonals
-            if ((matCopy[0, 0] ==  matCopy[1, 1] && matCopy[0, 0] == matCopy[2, 2] && matCopy[1, 1] != emptyField) || (matCopy[2, 0] == matCopy[1, 1] && matCopy[0, 2] == matCopy[2, 2] && matCopy[1, 1] != emptyField))
+            if ((mat[0, 0] ==  mat[1, 1] && mat[0, 0] == mat[2, 2] && mat[1, 1] != emptyField) || (mat[2, 0] == mat[1, 1] && mat[2, 0] == mat[0, 2] && mat[1, 1] != emptyField))
             {
                 whoWon = mat[1, 1];
                 return true;
@@ -151,6 +149,24 @@ namespace unbeatableTTT
 
             turnCounter++;
             Display(mat);
+
+            Console.WriteLine("Check(mat) == " + Check(mat));
+
+            if (Check(mat) == false)
+            {
+                if (turnCounter < 10)
+                {
+                    TakeTurn();                    
+                }
+                else
+                {
+                    Console.WriteLine("It's a draw!");
+                }                
+            }
+            else
+            {
+                WhoWon();
+            }
         }
 
         public void WhoWon()
@@ -205,6 +221,10 @@ namespace unbeatableTTT
                     Console.WriteLine("Error! scenario not forseen. Fix your code :)");
                 }                    
             }
+            else if (turnCounter == 9)
+            {
+                PlaceOnLastFreeSpot();
+            }
             return 0;
         }
 
@@ -227,6 +247,21 @@ namespace unbeatableTTT
             else
             {
                 y = 2;
+            }
+        }
+
+        public void PlaceOnLastFreeSpot()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (mat[i, j] == emptyField)
+                    {
+                        x = i;
+                        y = j;
+                    }
+                }
             }
         }
 
@@ -317,8 +352,10 @@ namespace unbeatableTTT
             }
         }
 
-        public bool LookForWin(char[,] matCopy, char forWho, out int x, out int y)
+        public bool LookForWin(char[,] mat, char forWho, out int x, out int y)
         {
+            char[,] matCopy = new char[3, 3];
+            Array.Copy(mat, 0, matCopy, 0, 9);
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -330,7 +367,10 @@ namespace unbeatableTTT
                         {
                             x = i;
                             y = j;
-                            return true;
+
+                            Console.WriteLine("Method LookForWin found match at: " + x + ", " + y);
+
+                            return true;                           
                         }
                         else
                         {
@@ -339,15 +379,16 @@ namespace unbeatableTTT
                     }
                 }
             }
-
             x = this.x;
             y = this.y;
             return false;
         }
 
-        public bool MakeTwoOptions(char[,] matCopy, char forWho, out int x, out int y)
+        public bool MakeTwoOptions(char[,] mat, char forWho, out int x, out int y)
         {
             Console.WriteLine("looking for two options");
+            char[,] matCopy = new char[3,3];
+            Array.Copy(mat, 0, matCopy, 0, 9);
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -359,7 +400,7 @@ namespace unbeatableTTT
                         if (LookForWin(matCopy, forWho, out x, out y) == true)
                         {
                             matCopy[x, y] = (forWho == activePlayer) ? alivePlayer : activePlayer;
-                            if (LookForWin(matCopy, forWho, out x, out y) == true)
+                            if (LookForWin(matCopy, forWho, out _, out _) == true)
                             {
                                 x = i;
                                 y = j;
@@ -367,12 +408,12 @@ namespace unbeatableTTT
                                 Console.WriteLine("zwracam y = " + y);
                                 return true;
                             }
+                            matCopy[x, y] = emptyField;
                         }
                         matCopy[i, j] = emptyField;
                     }
                 }
             }
-
             x = this.x;
             y = this.y;
             return false;
