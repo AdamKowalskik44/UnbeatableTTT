@@ -9,14 +9,14 @@ namespace unbeatableTTT
     class TicTacToe
 
         //TODO - Do napisania fukcja:
-        // -MakeTwoOptions
         // -co jeśli gracz nie zaczyna
         // -obsłużenie remisu
+        //runda 9
     {
         char[,] mat = new char[3, 3];
         char whoWon;
         char activePlayer, alivePlayer;
-        const char emptyField = '0';
+        const char emptyField = '_';
         const char player1 = 'X', player2 = 'O';
         int x, y;
         int turnCounter = 1;
@@ -103,7 +103,6 @@ namespace unbeatableTTT
                 whoWon = mat[1, 1];
                 return true;
             }
-            Console.WriteLine("brak wygranej");
             return false;
         }
 
@@ -134,6 +133,11 @@ namespace unbeatableTTT
                 Play();
             }
 
+            if (mat[x, y] != emptyField)
+            {
+                Console.WriteLine(mat[x, y] != emptyField);
+                Console.WriteLine("mat [" + x + ", " + y + "] = " + mat[x, y]);
+            }
             mat[x, y] = activePlayer; //finalizing player / computer choice, IMPORTANT
 
             if (activePlayer == player1) //changing active player
@@ -184,15 +188,15 @@ namespace unbeatableTTT
             }
             else if (turnCounter == 5 || turnCounter == 7)
             {
-                if (LookForWin(mat, activePlayer) == true) //look for a win
+                if (LookForWin(mat, activePlayer, out x, out y) == true) //look for a win
                 {
                     return 0;
                 }
-                else if (LookForWin(mat, alivePlayer) == true) //lok for a win from other player, if found, then mark it as own
+                else if (LookForWin(mat, alivePlayer, out x, out y) == true) //lok for a win from other player, if found, then mark it as own
                 {
                     return 0;
                 }
-                else if (MakeTwoOptions(mat, activePlayer) == true) //look for a place to leave a mark, that in future turn may have two possibilities to win
+                else if (MakeTwoOptions(mat, activePlayer, out x, out y) == true) //look for a place to leave a mark, that in future turn may have two possibilities to win
                 {
                     return 0;
                 }
@@ -313,7 +317,7 @@ namespace unbeatableTTT
             }
         }
 
-        public bool LookForWin(char[,] matCopy, char forWho)
+        public bool LookForWin(char[,] matCopy, char forWho, out int x, out int y)
         {
             for (int i = 0; i < 3; i++)
             {
@@ -335,11 +339,42 @@ namespace unbeatableTTT
                     }
                 }
             }
+
+            x = this.x;
+            y = this.y;
             return false;
         }
 
-        public bool MakeTwoOptions(char[,] matCopy, char forWho)
+        public bool MakeTwoOptions(char[,] matCopy, char forWho, out int x, out int y)
         {
+            Console.WriteLine("looking for two options");
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (matCopy[i, j] == emptyField)
+                    {
+                        matCopy[i, j] = forWho;
+
+                        if (LookForWin(matCopy, forWho, out x, out y) == true)
+                        {
+                            matCopy[x, y] = (forWho == activePlayer) ? alivePlayer : activePlayer;
+                            if (LookForWin(matCopy, forWho, out x, out y) == true)
+                            {
+                                x = i;
+                                y = j;
+                                Console.WriteLine("zwracam x = " + x);
+                                Console.WriteLine("zwracam y = " + y);
+                                return true;
+                            }
+                        }
+                        matCopy[i, j] = emptyField;
+                    }
+                }
+            }
+
+            x = this.x;
+            y = this.y;
             return false;
         }
     }
