@@ -10,7 +10,7 @@ namespace unbeatableTTT
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("hello");
+            Console.WriteLine("hello there");
             TicTacToe TicTacToe = new TicTacToe();
             TicTacToe.TakeTurn();
             Console.ReadKey();

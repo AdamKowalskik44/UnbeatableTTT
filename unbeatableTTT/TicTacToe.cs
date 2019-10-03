@@ -9,7 +9,7 @@ namespace unbeatableTTT
     class TicTacToe
     {
         #region class properties
-        char[,] mat = new char[3, 3];
+        char[,] board = new char[3, 3];
         char whoWon;
         char activePlayer, alivePlayer;
         const char emptyField = '_';
@@ -24,7 +24,7 @@ namespace unbeatableTTT
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    mat[i, j] = emptyField;
+                    board[i, j] = emptyField;
                 }
             }
 
@@ -49,57 +49,68 @@ namespace unbeatableTTT
                 activePlayer = player2;
             }
 
-            Display(mat);
+            Display(board);
         }
 
-        public void Display(char[,] mat)
+        /// <summary>
+        /// Displays a values of passed array
+        /// </summary>
+        public void Display(char[,] board)
         {
             Console.WriteLine();
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    Console.Write(mat[i, j] + " ");
+                    Console.Write(board[i, j] + " ");
                 }
                 Console.WriteLine();
             }
             Console.WriteLine();
         }
 
-        public bool Check(char[,] mat)
+        /// <summary>
+        /// Checks if there is a win in passed array. Returns true if yes and changes value whoWon
+        /// </summary>
+        /// <param name="board"></param>
+        /// <returns></returns>
+        public bool Check(char[,] board)
         {
             for (int i = 0; i < 3; i++) //checking rows
             {
-                if (mat[0, i] ==  mat[1, i] && mat[1, i] ==  mat[2, i] && mat[0, i] != emptyField)
+                if (board[0, i] ==  board[1, i] && board[1, i] ==  board[2, i] && board[0, i] != emptyField)
                 {
-                    whoWon = mat[0, i];
+                    whoWon = board[0, i];
                     return true;
                 }
             }
 
             for (int i = 0; i < 3; i++) //checking columns
             {
-                if (mat[i, 0] ==  mat[i, 1] && mat[i, 0] == mat[i, 2] && mat[i, 0] != emptyField)
+                if (board[i, 0] ==  board[i, 1] && board[i, 0] == board[i, 2] && board[i, 0] != emptyField)
                 {
-                    whoWon = mat[i, 0];
+                    whoWon = board[i, 0];
                     return true;                    
                 }
             }
 
             //checking diagonals
-            if ((mat[0, 0] ==  mat[1, 1] && mat[0, 0] == mat[2, 2] && mat[1, 1] != emptyField) || (mat[2, 0] == mat[1, 1] && mat[2, 0] == mat[0, 2] && mat[1, 1] != emptyField))
+            if ((board[0, 0] ==  board[1, 1] && board[0, 0] == board[2, 2] && board[1, 1] != emptyField) || (board[2, 0] == board[1, 1] && board[2, 0] == board[0, 2] && board[1, 1] != emptyField))
             {
-                whoWon = mat[1, 1];
+                whoWon = board[1, 1];
                 return true;
             }
             return false;
         }
 
+        /// <summary>
+        /// Main method of a program. Calls itself if turncounter < 10
+        /// </summary>
         public void TakeTurn()
         {
             Console.WriteLine("_____________________________________TURN_START_____________________");
             Console.WriteLine("Current turn is: " + turnCounter);
-            Display(mat);
+            Display(board);
             if (activePlayer == alivePlayer)
             {
                 do
@@ -110,11 +121,11 @@ namespace unbeatableTTT
                     Console.Write("choose coord y: ");
                     y = Int32.Parse(Console.ReadLine());
 
-                    if (mat[x, y] != emptyField)
+                    if (board[x, y] != emptyField)
                     {
                         Console.WriteLine("Wrong choice! Field " + x + ", " + y + " already occupied!");
                     }
-                } while (mat[x, y] != emptyField);
+                } while (board[x, y] != emptyField);
                     
             }
             else
@@ -122,12 +133,12 @@ namespace unbeatableTTT
                 Play();
             }
 
-            if (mat[x, y] != emptyField)
+            if (board[x, y] != emptyField)
             {
-                Console.WriteLine(mat[x, y] != emptyField);
-                Console.WriteLine("mat [" + x + ", " + y + "] = " + mat[x, y]);
+                Console.WriteLine(board[x, y] != emptyField);
+                Console.WriteLine("mat [" + x + ", " + y + "] = " + board[x, y]);
             }
-            mat[x, y] = activePlayer; //finalizing player / computer choice, IMPORTANT
+            board[x, y] = activePlayer; //finalizing player / computer choice, IMPORTANT
 
             if (activePlayer == player1) //changing active player
             {
@@ -139,11 +150,11 @@ namespace unbeatableTTT
             }
 
             turnCounter++;
-            Display(mat);
+            Display(board);
 
-            Console.WriteLine("Check(mat) == " + Check(mat));
+            Console.WriteLine("Check(mat) == " + Check(board));
 
-            if (Check(mat) == false)
+            if (Check(board) == false)
             {
                 if (turnCounter < 10)
                 {
@@ -160,13 +171,20 @@ namespace unbeatableTTT
             }
         }
 
+        /// <summary>
+        /// Displays who the winner is
+        /// </summary>
         public void WhoWon()
         {
-            Display(mat);
+            Display(board);
             Console.WriteLine();
             Console.WriteLine("The winer is: Player " + whoWon);
         }
 
+        /// <summary>
+        /// Main method of a computer player
+        /// </summary>
+        /// <returns></returns>
         public int Play()
         {
             if (turnCounter == 1) //if turn == 0, then computer randomizes to play at one of corners
@@ -175,7 +193,7 @@ namespace unbeatableTTT
             }
             else if (turnCounter == 2)
             {
-                if (mat[1, 1] == emptyField)
+                if (board[1, 1] == emptyField)
                 {
                     x = 1;
                     y = 1;
@@ -188,13 +206,13 @@ namespace unbeatableTTT
             else if (turnCounter == 3) //turn 3
             {
                 //if other player placed his mark not in corner or middle, then place it in the middle
-                if (mat[1, 0] == alivePlayer || mat[0, 1] == alivePlayer || mat[2, 1] == alivePlayer || mat[1, 2] == alivePlayer)
+                if (board[1, 0] == alivePlayer || board[0, 1] == alivePlayer || board[2, 1] == alivePlayer || board[1, 2] == alivePlayer)
                 {
                     x = 1;
                     y = 1;
                 }
 
-                else if (mat[1, 1] == alivePlayer) //if he placed his mark in the middle, then place mark in opposite corner to the one preivously placed
+                else if (board[1, 1] == alivePlayer) //if he placed his mark in the middle, then place mark in opposite corner to the one preivously placed
                 {
                     FindOppositeCorner(activePlayer);
                 }
@@ -206,15 +224,15 @@ namespace unbeatableTTT
             }
             else
             {
-                if (LookForWin(mat, activePlayer, out x, out y) == true) //look for a win
+                if (LookForWin(board, activePlayer, out x, out y) == true) //look for a win
                 {
                     return 0;
                 }
-                else if (LookForWin(mat, alivePlayer, out x, out y) == true) //lok for a win from other player, if found, then mark it as own
+                else if (LookForWin(board, alivePlayer, out x, out y) == true) //lok for a win from other player, if found, then mark it as own
                 {
                     return 0;
                 }
-                else if (MakeTwoOptions(mat, activePlayer, out x, out y) == true) //look for a place to leave a mark, that in future turn may have two possibilities to win
+                else if (MakeTwoOptions(board, activePlayer, out x, out y) == true) //look for a place to leave a mark, that in future turn may have two possibilities to win
                 {
                     return 0;
                 }
@@ -226,6 +244,9 @@ namespace unbeatableTTT
             return 0;
         }
 
+        /// <summary>
+        /// Marks random corner in a array. Should only be used on an array with empty corners
+        /// </summary>
         public void MarkRandomizedCorner()
         {
             Random rnd = new Random();
@@ -248,13 +269,16 @@ namespace unbeatableTTT
             }
         }
 
+        /// <summary>
+        /// marks the first free spot. Intended to be used on array with one empty spot.
+        /// </summary>
         public void PlaceOnLastFreeSpot()
         {
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    if (mat[i, j] == emptyField)
+                    if (board[i, j] == emptyField)
                     {
                         x = i;
                         y = j;
@@ -263,13 +287,17 @@ namespace unbeatableTTT
             }
         }
 
+        /// <summary>
+        /// Marks opposite corner to a already taken one (of the player given by variable mark). Should be used only on array with one corner taken
+        /// </summary>
+        /// <param name="mark"></param>
         public void FindOppositeCorner(char mark)
         {
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    if (mat[i, j] == mark)
+                    if (board[i, j] == mark)
                     {
                         if (i == 0)
                         {
@@ -293,6 +321,10 @@ namespace unbeatableTTT
             }
         }
 
+        /// <summary>
+        /// Marks corner adjacent to one already taken by player stated by mark variable. Randomizes one if there is to avalible. Should only be used on a array with one corner taken (by that player)
+        /// </summary>
+        /// <param name="mark"></param>
         public void FindAdjacentCorner(char mark)
         {
             int[,] coords = new int[2, 2];
@@ -303,7 +335,7 @@ namespace unbeatableTTT
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    if (mat[i, j] == emptyField && (i == 0 || i == 2) && (j == 0 || j == 2))
+                    if (board[i, j] == emptyField && (i == 0 || i == 2) && (j == 0 || j == 2))
                     {
                         if(i == x && j == y)
                         {
@@ -350,6 +382,10 @@ namespace unbeatableTTT
             }
         }
 
+        /// <summary>
+        /// searches for a win situation in next move for a given player in given array. Returns true if found and outs x and y. Returns false if not found and outs current x and y
+        /// </summary>
+        /// <returns></returns>
         public bool LookForWin(char[,] mat, char forWho, out int x, out int y)
         {
             char[,] matCopy = new char[3, 3];
@@ -382,6 +418,10 @@ namespace unbeatableTTT
             return false;
         }
 
+        /// <summary>
+        /// Searches for a move that will have to options to win in move after (so if one is blocked, the second remains) Returns true if found and outs x and y. Returns false if not found and outs current x and y
+        /// </summary>
+        /// <returns></returns>
         public bool MakeTwoOptions(char[,] mat, char forWho, out int x, out int y)
         {
             Console.WriteLine("looking for two options");
