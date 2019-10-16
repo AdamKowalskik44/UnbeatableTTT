@@ -11,8 +11,8 @@ namespace unbeatableTTT
         static void Main(string[] args)
         {
             Console.WriteLine("hello there");
-            TicTacToe TicTacToe = new TicTacToe();
-            TicTacToe.TakeTurn();
+            TicTacToe ticTacToe = new TicTacToe();
+            ticTacToe.TakeTurn();
             Console.ReadKey();
         }
     }

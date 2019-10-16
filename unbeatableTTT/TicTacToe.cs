@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace unbeatableTTT
 {
+    //TODO add struct coordinates
     class TicTacToe
     {
         #region class properties
@@ -401,8 +402,6 @@ namespace unbeatableTTT
                         {
                             x = i;
                             y = j;
-
-                            Console.WriteLine("Method LookForWin found match at: " + x + ", " + y);
 
                             return true;                           
                         }
